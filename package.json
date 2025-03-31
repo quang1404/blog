@@ -2,9 +2,9 @@
   "name": "blog",
   "version": "1.0.0",
   "description": "hoc code BE voi node.js",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "nodemon --inspect index.js",
+    "start": "nodemon --inspect src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
