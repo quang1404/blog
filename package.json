@@ -2,14 +2,16 @@
   "name": "blog",
   "version": "1.0.0",
   "description": "hoc code BE voi node.js",
+  "type": "commonjs",
   "main": "src/index.js",
   "scripts": {
     "start": "nodemon --inspect src/index.js",
+    "watch": "node-sass src/resources/scss/app.scss src/public/css/app.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/quang1404/blog.git"
+    "url": "git https://github.com/quang1404/blog.git"
   },
   "keywords": [
     "blog",
@@ -17,7 +19,7 @@
     "with",
     "node.js",
     "and",
-    "reaact"
+    "react"
   ],
   "author": "quang",
   "license": "ISC",
@@ -26,9 +28,12 @@
   },
   "homepage": "https://github.com/quang1404/blog#readme",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "express-handlebars": "^8.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "morgan": "^1.5.2",
+    "nodemon": "^3.1.9",
+    "sass": "^1.86.3"
   }
 }
