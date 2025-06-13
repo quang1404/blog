@@ -1,0 +1,51 @@
+services:
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysqlcontainer
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    volumes:
+      - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - $HOME/database:/var/lib/mysql
+    ports:
+      - 3307:3306
+    expose:
+      - 3306
+    environment:
+      MYSQL_DATABASE: blogdb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: quang
+      MYSQL_ROOT_PASSWORD: quang
+      SERVICE_TAGS: prod
+      SERVICE_NAME: mysqldb
+    networks:
+      - internalnet
+
+  blogapp:
+    container_name: blogappcontainer
+    build: .
+    image: blogapp:v1
+    volumes:
+      - $HOME/blogapp:/code
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    environment:
+      DB_HOST: mysqldb
+      DB_PORT: 3307
+      DB_USER: 'admin'
+      DB_PASSWORD: 'quang'
+      DB_NAME: blogdb
+      DB_CONNECTION_LIMIT: 20
+      SERVICE_TAGS: prod
+      SERVICE_NAME: blogappservice
+      SERVER_PORT: 3000
+    depends_on:
+      - mysqldb
+    networks:
+      - internalnet
+
+networks:
+  internalnet:
+    driver: bridge
