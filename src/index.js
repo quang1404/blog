@@ -8,7 +8,31 @@ const morgan = require("morgan");
 const methodOverride = require("method-override");
 const { engine } = require("express-handlebars");
 
-const SortMiddleware = require("./app/middleware/SortMiddleware");
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+const SortMiddleware = require("./middleware/SortMiddleware");
+
+
+const options = {
+  definition: { 
+    openapi: "3.0.0",
+    info: {
+      title: "Blog API",
+      version: "1.0.0",
+      description: "A simple Express Blog API",
+    },
+    servers: [
+      {
+        url: `http://localhost:3000/`,
+      },
+    ],
+  },
+  apis: ["./src/routes/*.js"],
+};
+
+const swaggerSpec = swaggerJsDoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const route = require("./routes");
 const db = require("./config/db");
@@ -37,33 +61,8 @@ app.engine(
   "hbs",
   engine({
     extname: ".hbs",
-    helpers: {
-      sum: (a, b) => a + b,
-      sortable: (field, sort) => {
-
-        const sortType = field === sort.column ? sort.type : "default";
-
-        const icons = {
-          default: "bi bi-chevron-expand",
-          asc: "bi bi-sort-down-alt",
-          desc: "bi bi-sort-down",
-        };
-
-        const types = {
-          default: "desc",
-          asc: "desc",
-          desc: "asc",
-        }
-
-        const icon = icons[sortType];
-        const type = types[sortType];
-
-        return `<a href="?_sort&column=${field}&type=${type}" class="sort-btn">
-                        <span class="${icon}"></span>
-                </a> `;
-      },
-    },
-  })
+    helpers: require("./helpers/handlebars"),
+  }),
 );
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "resources", "views"));

@@ -7,11 +7,8 @@ const {
 class MeController {
   //[GET] /me/stored/courses
   storedCourses(req, res, next) {
-
-    let courseQuery = Course.find({});
-
     Promise.all([
-      courseQuery, // Use the query with sorting!
+      Course.find({}).sortable(req),       
       Course.countDocumentsDeleted(),
     ])
       .then(([courses, deletedCount]) =>
